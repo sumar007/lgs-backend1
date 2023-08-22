@@ -16,8 +16,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 const multer = require('multer');
 
-// Connect to the MongoDB database
-mongoose.connect('mongodb+srv://sumar3115:1tBcmQF7IHz3mbA6@lgswebsite.om6meue.mongodb.net/Lgs?retryWrites=true&w=majority', {
+//Connect to the MongoDB database
+
+mongoose.connect('mongodb://localhost:27017/lgs', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -56,10 +57,7 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 // Schema for tracking website visits
 const visitSchema = new mongoose.Schema({
-  count: {
-    type: Number,
-    default: 0,
-  },
+  count: Number
 });
 
 const Visit = mongoose.model('Visit', visitSchema);
@@ -343,55 +341,30 @@ const sendConfirmationEmailToAdmin = async (careerFormData) => {
 
 
 // Endpoint to increment the website visit count
-// Increment the visit count in the database and return the updated count
-const incrementVisit = async () => {
+app.get('/getVisitCount', async (req, res) => {
   try {
-    // Find the visit document in the database (there should only be one)
-    const visitDoc = await Visit.findOne();
-
-    // If the document doesn't exist, create one
-    if (!visitDoc) {
-      await Visit.create({ count: 1 });
-      return 1;
-    } else {
-      // If the document exists, increment the count
-      await Visit.updateOne({}, { $inc: { count: 1 } });
-      return visitDoc.count + 1;
-    }
-  } catch (err) {
-    console.error('Error incrementing visit count:', err);
-    return 0;
-  }
-};
-
-// Route to fetch the visit count
-app.get('/api/visit-count', async (req, res) => {
-  try {
-    // Fetch the visit count from the database
-    const visitDoc = await Visit.findOne();
-    if (!visitDoc) {
-      // If there's no visit count document, create one with the initial count as 0
-      await Visit.create({ count: 0 });
-      return res.json({ visitCount: 0 });
-    }
-
-    // Return the current visit count
-    res.json({ visitCount: visitDoc.count });
+    const visit = await Visit.findOne();
+    const visitCount = visit ? visit.count : 0;
+    res.json({ visitCount });
   } catch (error) {
     console.error('Error fetching visit count:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'An error occurred while fetching the visit count' });
   }
 });
 
-// Route for the homepage ("/")
-app.get('/', async (req, res) => {
+app.post('/incrementVisitCount', async (req, res) => {
   try {
-    // Increment the visit count on every request to the home page
-    const updatedVisitCount = await incrementVisit();
-    res.json({ success: true, visitCount: updatedVisitCount });
+    let visit = await Visit.findOne();
+    if (!visit) {
+      visit = await Visit.create({ count: 1 });
+    } else {
+      visit.count += 1;
+      await visit.save();
+    }
+    res.json({ success: true });
   } catch (error) {
     console.error('Error incrementing visit count:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'An error occurred while incrementing the visit count' });
   }
 });
 
@@ -404,3 +377,110 @@ const port = process.env.PORT || 3005;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+
+
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const cors = require('cors');
+// const app = express();
+// const PORT = 3005;
+
+// mongoose.connect('mongodb://localhost:27017/unique-visitors', { useNewUrlParser: true, useUnifiedTopology: true })
+//   .then(() => {
+//     console.log("Connected to MongoDB");
+//   })
+//   .catch((error) => {
+//     console.error("Error connecting to MongoDB:", error);
+//   });
+
+// const userSchema = new mongoose.Schema({
+//   ipAddress: String
+// });
+
+// const User = mongoose.model('User', userSchema);
+
+// app.use(cors());
+
+// // Middleware for tracking unique visitors and incrementing visit counts
+// app.use(async (req, res, next) => {
+//   const ipAddress = req.ip; // Extract the client's IP address
+
+//   // Check if the IP address exists in the database
+//   const existingUser = await User.findOne({ ipAddress });
+
+//   if (!existingUser) {
+//     // If IP address doesn't exist, increment visit count and store IP address in database
+//     await User.create({ ipAddress });
+//   }
+
+//   next();
+// });
+
+// // Route to get the unique visitor count
+// app.get('/getVisitCount', async (req, res) => {
+//   try {
+//     const visitCount = await User.countDocuments();
+//     res.json({ visitCount });
+//   } catch (error) {
+//     console.error('Error fetching visit count:', error);
+//     res.status(500).json({ error: 'An error occurred while fetching the visit count' });
+//   }
+// });
+
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const cors = require('cors');
+// const app = express();
+// const PORT = 3005;
+
+// mongoose.connect('mongodb://localhost:27017/unique-visitors', { useNewUrlParser: true, useUnifiedTopology: true })
+//   .then(() => {
+//     console.log("Connected to MongoDB");
+//   })
+//   .catch((error) => {
+//     console.error("Error connecting to MongoDB:", error);
+//   });
+
+// const visitSchema = new mongoose.Schema({
+//   count: Number
+// });
+
+// const Visit = mongoose.model('Visit', visitSchema);
+
+// app.use(cors());
+// app.use(express.json());
+
+// app.get('/getVisitCount', async (req, res) => {
+//   try {
+//     const visit = await Visit.findOne();
+//     const visitCount = visit ? visit.count : 0;
+//     res.json({ visitCount });
+//   } catch (error) {
+//     console.error('Error fetching visit count:', error);
+//     res.status(500).json({ error: 'An error occurred while fetching the visit count' });
+//   }
+// });
+
+// app.post('/incrementVisitCount', async (req, res) => {
+//   try {
+//     let visit = await Visit.findOne();
+//     if (!visit) {
+//       visit = await Visit.create({ count: 1 });
+//     } else {
+//       visit.count += 1;
+//       await visit.save();
+//     }
+//     res.json({ success: true });
+//   } catch (error) {
+//     console.error('Error incrementing visit count:', error);
+//     res.status(500).json({ error: 'An error occurred while incrementing the visit count' });
+//   }
+// });
+
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
