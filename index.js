@@ -124,6 +124,95 @@ const careerFormSchema = new mongoose.Schema({
 const CareerForm = mongoose.model('CareerForm', careerFormSchema);
 
 const adminEmail = '160419733122@mjcollege.ac.in'; // Replace with the admin's email address
+// Schema for contactus
+const contactSchema = new mongoose.Schema({
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+
+  },
+  message: {
+    type: String,
+    required: true,
+  },
+});
+
+const Contact = mongoose.model('Contact', contactSchema);
+// API for contactus
+app.post('/contactlgs', async (req, res, next) => {
+  try {
+    const { firstName,lastName, email, message } = req.body;
+    console.log(firstName,lastName, email, message)
+    if (!firstName || !lastName || !email || !message) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+   
+
+    const newContact = new Contact({
+      firstName,lastName, email, message,
+    });
+
+    await newContact.save();
+
+    // Send an email to the user
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'ecommerceapp8@gmail.com',
+        pass: 'cuesoyfbusquxakg',
+      },
+    });
+
+    const userMailOptions = {
+      from: 'ecommerceapp8@gmail.com',
+      to: email,
+      subject: 'Registration Confirmation',
+      text: `Thank you for contacting us. We will get back to you soon.`,
+    };
+
+    transporter.sendMail(userMailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email to user:', error);
+        // Continue to respond to the client even if there is an error with email sending
+        res.json({ success: true });
+      } else {
+        console.log('Email sent to user:', info.response);
+        // Send a response message
+        res.json({ success: true });
+
+        // Now, send an email to the admin with user details
+        const adminMailOptions = {
+          from: 'ecommerceapp8@gmail.com',
+          to: adminEmail,
+          subject: 'New User Registration',
+          text: `A new user has registered with the following details:\n\nFirstName: ${firstName}\nLastName: ${lastName}\nEmail: ${email}\nMessage: ${message}`,
+        };
+
+        transporter.sendMail(adminMailOptions, (error, info) => {
+          if (error) {
+            console.error('Error sending email to admin:', error);
+          } else {
+            console.log('Email sent to admin:', info.response);
+          }
+        });
+      }
+    });
+  } catch (error) {
+    console.error('Error registering user:', error);
+    res.status(500).send('Internal Server Error');
+    // Pass the error to the error handling middleware
+    next(error);
+  }
+});
 
 // API for registration
 app.post('/register', async (req, res, next) => {
