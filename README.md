@@ -17,15 +17,20 @@ To get started with this project, follow the steps below:
 
    ```bash
    git clone https://github.com/your-username/lgs-backend.git
-   cd lgs-backend```
+   cd lgs-backend
+   ```
 
 2. Install the required dependencies:
 
-  ```npm install```
+  ```bash
+  npm install
+  ```
 
 3.Copy the template.env file and rename it to .env:
 
-```cp template.env .env```
+```bash
+cp template.env .env
+```
 
 Update the .env file with your configuration values.
 
@@ -34,7 +39,9 @@ Update the .env file with your configuration values.
 After setting up the environment variables, you can run the project locally:
 
 
-```npm start```
+```bash
+npm start
+```
 
 The server will start, and you can access the API at http://localhost:3005.
 
