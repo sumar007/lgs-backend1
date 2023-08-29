@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  lgsbackend:
+    image: quay.io/labyrinthglobalsolutions/lgs-backend:latest
+    restart: always
+    labels:
+      - traefik.frontend.rule=Host:api.labyrinthglobalsolutions.com
+    networks:
+     - web
+    ports:
+      - "3005:3005"
+networks:
+ web:
+   external: true

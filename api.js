@@ -18,7 +18,7 @@ const adminEmail = process.env.ADMIN_MAIL;
 // Use the cors middleware with the appropriate options
 router.use(
     cors({
-        origin: process.env.LOCAL_HOST, // Replace with the origin of your frontend
+        origin: process.env.FRONT_END_URL, // Replace with the origin of your frontend
         credentials: true,
     })
 );
@@ -72,7 +72,7 @@ router.use(session({
     saveUninitialized: false,
     cookie: {
         maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
-        domain: process.env.LOCAL_HOST, // Replace with your frontend's domain
+        domain: process.env.FRONT_END_URL, // Replace with your frontend's domain
         path: '/', // Set to '/' to allow the cookie to be sent on all routes
     }
 }));

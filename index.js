@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Use the cors middleware with the appropriate options
 app.use(
   cors({
-    origin: 'http://localhost:3000', // Replace with the origin of your frontend
+    origin: process.env.FRONT_END_URL, // Replace with the origin of your frontend
     credentials: true,
   })
 );
