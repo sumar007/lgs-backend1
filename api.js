@@ -11,13 +11,14 @@ const ApiFeatures = require('./apiFeatures');
 const router = express.Router();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+require('dotenv').config();
 router.use(cookieParser());
 
-const adminEmail = '160419733122@mjcollege.ac.in';
+const adminEmail = process.env.ADMIN_MAIL;
 // Use the cors middleware with the appropriate options
 router.use(
     cors({
-        origin: 'http://localhost:3000', // Replace with the origin of your frontend
+        origin: process.env.LOCAL_HOST, // Replace with the origin of your frontend
         credentials: true,
     })
 );
@@ -66,12 +67,12 @@ passport.deserializeUser(async (id, done) => {
 
 // after login admin session will expire after 24 hours
 router.use(session({
-    secret: 'sadghfjytjrthfddrfhnrtjyrjtr',
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
     cookie: {
         maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
-        domain: 'http://localhost:3000', // Replace with your frontend's domain
+        domain: process.env.LOCAL_HOST, // Replace with your frontend's domain
         path: '/', // Set to '/' to allow the cookie to be sent on all routes
     }
 }));
@@ -120,13 +121,13 @@ router.post('/contactlgs', async (req, res, next) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'ecommerceapp8@gmail.com',
-                pass: 'cuesoyfbusquxakg',
+                user: process.env.EMAIL_USER,
+                pass:process.env.EMAIL_PASSWORD,
             },
         });
 
         const userMailOptions = {
-            from: 'ecommerceapp8@gmail.com',
+            from:process.env.EMAIL_USER,
             to: email,
             subject: 'Registration Confirmation',
             text: `Thank you for contacting us. We will get back to you soon.`,
@@ -144,7 +145,7 @@ router.post('/contactlgs', async (req, res, next) => {
 
                 // Now, send an email to the admin with user details
                 const adminMailOptions = {
-                    from: 'ecommerceapp8@gmail.com',
+                    from: process.env.EMAIL_USER,
                     to: adminEmail,
                     subject: 'New User Registration',
                     text: `A new user has registered with the following details:\n\nFirstName: ${firstName}\nLastName: ${lastName}\nEmail: ${email}\nMessage: ${message}`,
@@ -188,13 +189,13 @@ router.post('/queries', async (req, res, next) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'ecommerceapp8@gmail.com',
-                pass: 'cuesoyfbusquxakg',
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASSWORD,
             },
         });
 
         const userMailOptions = {
-            from: 'ecommerceapp8@gmail.com',
+            from: process.env.EMAIL_USER,
             to: queryEmail,
             subject: 'Registration Confirmation',
             text: `Thank you for contacting us. We will get back to you soon.`,
@@ -212,7 +213,7 @@ router.post('/queries', async (req, res, next) => {
 
                 // Now, send an email to the admin with user details
                 const adminMailOptions = {
-                    from: 'ecommerceapp8@gmail.com',
+                    from: process.env.EMAIL_USER,
                     to: adminEmail,
                     subject: 'New User Registration',
                     text: `A new user has registered with the following details:\n\nFirstName: ${queryFirstName}\nLastName: ${queryLastName}\nEmail: ${queryEmail}\nCountry:${queryCountry}\nMessage: ${queryMessage}`,
@@ -261,13 +262,13 @@ router.post('/register', async (req, res, next) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'ecommerceapp8@gmail.com',
-                pass: 'cuesoyfbusquxakg',
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASSWORD,
             },
         });
 
         const userMailOptions = {
-            from: 'ecommerceapp8@gmail.com',
+            from: process.env.EMAIL_USER,
             to: email,
             subject: 'Registration Confirmation',
             text: `Thank you for contacting us. You have selected the service: ${service}. We will get back to you soon.`,
@@ -285,7 +286,7 @@ router.post('/register', async (req, res, next) => {
 
                 // Now, send an email to the admin with user details
                 const adminMailOptions = {
-                    from: 'ecommerceapp8@gmail.com',
+                    from: process.env.EMAIL_USER,
                     to: adminEmail,
                     subject: 'New User Registration',
                     text: `A new user has registered with the following details:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nService: ${service}\nMessage: ${message}`,
@@ -370,14 +371,14 @@ const sendConfirmationEmailToUser = async (careerFormData) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'ecommerceapp8@gmail.com',
-                pass: 'cuesoyfbusquxakg',
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASSWORD,
             },
         });
 
         // Email options for the user
         const userMailOptions = {
-            from: 'ecommerceapp8@gmail.com',
+            from: process.env.EMAIL_USER,
             to: email,
             subject: 'Career Form Submission Confirmation',
             text: `Thank you for submitting the career form. We have received your details and will get back to you soon.`,
@@ -402,14 +403,14 @@ const sendConfirmationEmailToAdmin = async (careerFormData) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'ecommerceapp8@gmail.com',
-                pass: 'cuesoyfbusquxakg',
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASSWORD,
             },
         });
 
         // Email options for the admin
         const adminMailOptions = {
-            from: 'ecommerceapp8@gmail.com',
+            from: process.env.EMAIL_USER,
             to: adminEmail,
             subject: 'New Career Form Submission',
             text: `A new career form has been submitted with the following details:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nJob Profile: ${jobProfile}`,
