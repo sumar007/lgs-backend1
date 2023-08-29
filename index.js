@@ -8,7 +8,13 @@ const { User, Contact, Visit, CareerForm } = require('./db');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+// Use the cors middleware with the appropriate options
+app.use(
+  cors({
+    origin: 'http://localhost:3000', // Replace with the origin of your frontend
+    credentials: true,
+  })
+);
 
 // Import your API router from api.js
 const apiRouter = require('./api');
