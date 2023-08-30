@@ -96,7 +96,10 @@ const storage = multer.diskStorage({
 
 // Set up the multer middleware with the storage configuration
 const upload = multer({ storage: storage });
-
+//health check api
+router.get('/health-check',(req,res)=>{
+    return res.status(200).json('Server is running');
+});
 // Create an endpoint for checking authentication
 router.get('/check-auth', (req, res) => {
     // If the user reaches this point, they are authenticated
