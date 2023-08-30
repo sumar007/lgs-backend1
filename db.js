@@ -1,9 +1,13 @@
 // db.js
+require('dotenv').config();
 const mongoose = require("mongoose");
 //connection to mongodb 
-mongoose.connect('mongodb://localhost:27017/lgs', {
+
+
+mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    
 })
     .then(() => {
         console.log('Connected to the database');
