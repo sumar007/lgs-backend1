@@ -1,7 +1,7 @@
 // db.js
 const mongoose = require("mongoose");
 //connection to mongodb 
-mongoose.connect('mongodb://localhost:27017/lgs', {
+mongoose.connect('mongodb://localhost:27017/lgsweb', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
