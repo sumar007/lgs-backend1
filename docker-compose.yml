@@ -1,7 +1,9 @@
 version: "3.9"
 services:
   lgsbackend:
-    image: quay.io/labyrinthglobalsolutions/lgs-backend:latest
+    env_file:
+    - .env
+    image: quay.io/labyrinthglobalsolutions/lgs-backend:${IMAGE_TAG}
     restart: always
     labels:
       - traefik.frontend.rule=Host:api.labyrinthglobalsolutions.com
