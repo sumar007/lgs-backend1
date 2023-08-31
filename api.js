@@ -15,13 +15,7 @@ require('dotenv').config();
 router.use(cookieParser());
 
 const adminEmail = process.env.ADMIN_MAIL;
-// Use the cors middleware with the appropriate options
-router.use(
-    cors({
-        origin: process.env.FRONT_END_URL, // Replace with the origin of your frontend
-        credentials: true,
-    })
-);
+
 //middleware for  checking login authentication
 const ensureAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
