@@ -11,17 +11,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Use the cors middleware with the appropriate options
 
 const frontendURL = process.env.FRONT_END_URL 
+const regex = process.env.REG_EX
 const allowedOrigins = [frontendURL, addWwwToUrl(frontendURL)]
 console.log("setting cors to: "+ allowedOrigins)
+console.log("setting cors to regex: "+ regex)
 cors({
-  origin: function (origin, callback) {
-    // List of allowed origins
-    if (!origin || allowedOrigins.some(allowedOrigin => origin.startsWith(allowedOrigin))) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: allowedOrigins,
   credentials: true,
 });
 
