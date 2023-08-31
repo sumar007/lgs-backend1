@@ -8,4 +8,4 @@ function addWwwToUrl(url) {
     return urlObj.href;
 }
 
-export {addWwwToUrl}
+module.exports = {addWwwToUrl};
