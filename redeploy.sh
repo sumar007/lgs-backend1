@@ -11,3 +11,5 @@ sed -i "s/\${IMAGE_TAG}/$COMMIT_SHA/g" docker-compose-prod.yml
 
 
 docker compose -f docker-compose-prod.yml down && docker compose -f docker-compose-prod.yml pull &&  docker compose -f docker-compose-prod.yml up -d 
+
+exit 0
