@@ -15,10 +15,12 @@ const regex = process.env.REG_EX
 const allowedOrigins = [frontendURL, addWwwToUrl(frontendURL)]
 console.log("setting cors to: "+ allowedOrigins)
 console.log("setting cors to regex: "+ regex)
-cors({
-  origin: regex,
-  credentials: true,
-});
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 
 // Import your API router from api.js
 const apiRouter = require('./api');
