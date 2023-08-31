@@ -2,7 +2,7 @@
 set -ex
 
 #nginx
-git pull origin main
+#git pull origin main
 
 cp hack/compose-template.yml docker-compose-prod.yml
 
