@@ -9,11 +9,19 @@ const {addWwwToUrl} = require("./utils");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // Use the cors middleware with the appropriate options
-console.log("setting cors to: "+ process.env.FRONT_END_URL)
+
 const frontendURL = process.env.FRONT_END_URL 
+const whitelist = [frontendURL, addWwwToUrl(frontendURL)]
+console.log("setting cors to: "+ whitelist)
 app.use(
   cors({
-    origin: [frontendURL, addWwwToUrl(frontendURL)], // Replace with the origin of your frontend
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true)
+      } else {
+        callback(new Error('Not allowed by CORS'))
+      }
+    }, // Replace with the origin of your frontend
     credentials: true,
   })
 );
