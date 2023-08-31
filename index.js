@@ -16,7 +16,7 @@ const allowedOrigins = [frontendURL, addWwwToUrl(frontendURL)]
 console.log("setting cors to: "+ allowedOrigins)
 console.log("setting cors to regex: "+ regex)
 cors({
-  origin: allowedOrigins,
+  origin: regex,
   credentials: true,
 });
 
