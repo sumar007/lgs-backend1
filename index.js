@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const frontendURL = process.env.FRONT_END_URL 
 const allowedOrigins = [frontendURL, addWwwToUrl(frontendURL)]
-console.log("setting cors to: "+ allowedOrigins)
+console.log("setting cors origins to: "+ allowedOrigins)
 app.use(
   cors({
     origin: allowedOrigins,
