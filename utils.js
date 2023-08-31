@@ -1,3 +1,10 @@
+function removeTrailingSlash(url) {
+  if (url.endsWith('/')) {
+    return url.slice(0, -1);
+  }
+  return url;
+}
+
 function addWwwToUrl(url) {
     const urlObj = new URL(url);
   
@@ -5,7 +12,7 @@ function addWwwToUrl(url) {
       urlObj.hostname = 'www.' + urlObj.hostname;
     }
   
-    return urlObj.href;
+    return removeTrailingSlash(urlObj.href);
 }
 
 module.exports = {addWwwToUrl};

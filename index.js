@@ -11,20 +11,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Use the cors middleware with the appropriate options
 
 const frontendURL = process.env.FRONT_END_URL 
-const whitelist = [frontendURL, addWwwToUrl(frontendURL)]
-console.log("setting cors to: "+ whitelist)
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true)
-      } else {
-        callback(new Error('Not allowed by CORS'))
-      }
-    }, // Replace with the origin of your frontend
-    credentials: true,
-  })
-);
+const allowedOrigins = [frontendURL, addWwwToUrl(frontendURL)]
+console.log("setting cors to: "+ allowedOrigins)
+cors({
+  origin: function (origin, callback) {
+    // List of allowed origins
+    if (!origin || allowedOrigins.some(allowedOrigin => origin.startsWith(allowedOrigin))) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+});
 
 // Import your API router from api.js
 const apiRouter = require('./api');
