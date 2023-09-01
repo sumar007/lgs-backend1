@@ -5,13 +5,17 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const { User, Contact, Visit, CareerForm } = require('./db');
-
+const {addWwwToUrl} = require("./utils");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // Use the cors middleware with the appropriate options
+
+const frontendURL = process.env.FRONT_END_URL 
+const allowedOrigins = [frontendURL, addWwwToUrl(frontendURL)]
+console.log("setting cors origins to: "+ allowedOrigins)
 app.use(
   cors({
-    origin: process.env.FRONT_END_URL, // Replace with the origin of your frontend
+    origin: allowedOrigins,
     credentials: true,
   })
 );
